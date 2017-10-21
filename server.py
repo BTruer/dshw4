@@ -25,12 +25,19 @@ if tcp_udp == 'tcp':			#TCP
         		break
 		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
-		host = socket.gethostname() # Get local machine name
-		server_sock.bind((host, port))        # Bind to the port
-		server_sock.listen(5)
-		client_sock, addr = server_sock.accept()     # Establish connection with client.
-		size = int(client_sock.recv(1024))
-		client_sock.send('1:'+str(size))
+		host = socket.gethostname() 			# Get local machine name
+		server_sock.bind((host, port)) 			# Bind to the port
+		server_sock.listen(5)					# Get to listen
+		client_sock, addr = server_sock.accept()# Establish connection with client
+		buff_size = int(client_sock.recv(1024))	# Get the buffer size
+		client_sock.send('1')					# Send the ack bit
+		count = 0
+		while True:
+			data, size = client_sock.recv(buff_size)
+			count += size
+			if(count >= buff_size)
+				break
+
 		client_sock.close()    
 
 else: 							#UDP

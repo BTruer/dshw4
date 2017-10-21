@@ -29,9 +29,12 @@ if tcp_udp == 'tcp':			#TCP
 		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		server_sock.connect((host,port))
-		server_sock.send(str(size)) #send the size
-		ack, size = server_sock.recv(1024).split(':')
-		server_sock.close
+		server_sock.send(str(size)) 	#send the size
+		ack = server_sock.recv(1024) 	#get the ack bit
+		count = 0
+		while(count>0):
+			server_sock.send(' '+str())
+		server_sock.close()
 
 else: 							#UDP
 	if stop_stream == 'stop':	#stop
