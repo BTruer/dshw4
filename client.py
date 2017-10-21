@@ -3,7 +3,7 @@
 import socket               # Import socket module
 import sys
 
-#python client.py localhost 12345 tcp_udp streaming 64
+#python client.py Toshtp 12345 tcp_udp streaming 64
 
 host = str(sys.argv[1])
 port = int(sys.argv[2])
@@ -16,36 +16,32 @@ if tcp_udp == 'tcp':			#TCP
 	if stop_stream == 'stop':	#Stop
 		print "RUNNING TCP STOP AND WAIT"
 		'''
-		startmsg, size = read();
-		while (buf, size = read())
-    	count += size
-    	send(ackbuf, 1);
-    	if (count >= expected_size)
-        break;
 		'''
 
-	else:						#TCP stream
+	else:#python client.py Toshtp 12345 tcp streaming 65536  #TCP stream
 		print "RUNNING TCP STREAMING"
 		'''
-		startmsg, size = read()
-		send(ackbuf, 1)
-		while (buf, size = read())
-    	count += size
-    	if (count >= expected_size)
-        break
+		send(startmsg)     		done 
+		ack, size = read()		done
+		while (count > 0)		
+    		send(buffer, size)
+    		count -= size
 		'''
-		s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		server_sock.connect((host,port))
+		server_sock.send(str(size)) #send the size
+		ack, size = server_sock.recv(1024).split(':')
+		server_sock.close
 
 else: 							#UDP
 	if stop_stream == 'stop':	#stop
 		print "RUNNING UDP STOP AND WAIT"
 		'''
-		startmsg, size = read();
-		while (buf, size = read())
-    	count += size
-    	send(ackbuf, 1);
-    	if (count >= expected_size)
-        break;
+		send(startmsg)
+		ack, size = read()
+		while (count > 0)
+    		send(buffer, size)
+    		count -= size
 		'''
 	else:						#UDP stream
 		print "RUNNING UDP STREAMING"

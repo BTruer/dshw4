@@ -7,5 +7,6 @@ host = socket.gethostname() # Get local machine name
 port = 12345                # Reserve a port for your service.
 
 s.connect((host, port))
+s.send("this is a message")
 print s.recv(1024)
 s.close                     # Close the socket when done
