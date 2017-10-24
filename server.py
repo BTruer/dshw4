@@ -17,12 +17,12 @@ if tcp_udp == 'tcp':			#TCP
 	else:#python server.py 12345 tcp stream #TCP stream
 		print "RUNNING TCP STREAMING"
 		'''
-		startmsg, size = read()			done
-		send(ackbuf, 1)					done
-		while (buf, size = read())		
-    		count += size
-    		if (count >= expected_size)
-        		break
+		ack, size = read()
+		send(ackbuf, 1)
+		while (buf, bytes_read = read())
+		    count += bytes_read
+		    if (count >= expected_size)
+		        break
 		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
 		host = socket.gethostname() 			# Get local machine name
@@ -33,7 +33,7 @@ if tcp_udp == 'tcp':			#TCP
 		client_sock.send('1')					# Send the ack bit
 		count = 0
 		while True:
-			data, size = client_sock.recv(buff_size)
+			data, size = client_sock.recv(buff_size).split(,)
 			count += size
 			if(count >= buff_size)
 				break
