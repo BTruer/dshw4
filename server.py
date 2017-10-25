@@ -29,20 +29,20 @@ if tcp_udp == 'tcp':			#TCP
 		server_sock.bind((host, port)) 			# Bind to the port
 		server_sock.listen(5)					# Get to listen
 		client_sock, addr = server_sock.accept()# Establish connection with client
-		temp = client_sock.recv(1024).split(',')
+		temp = client_sock.recv(1024).decode().split(',')
 		total_size = int(temp[0].split(":")[1])
 		message_size = int(temp[1].split(":")[1])
-		client_sock.send('1')					# Send the ack bit
+		client_sock.send('1'.encode())					# Send the ack bit
 		byte_count = 0
 		messages = 0
 		while True:
-			data = client_sock.recv(message_size)
+			data = client_sock.recv(message_size).decode()
 			byte_count += len(data)
 			messages+=1
 			if(byte_count >= total_size):
 				break
-		print("num of messages read"+messages)
-		print("num of bytes read:"+byte_count)
+		print("num of messages read:"+str(messages))
+		print("num of bytes read:"+str(byte_count))
 
 		client_sock.close()    
 

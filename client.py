@@ -18,7 +18,6 @@ if tcp_udp == 'tcp':			#TCP
 	if stop_stream == 'stop':	#Stop
 		print("RUNNING TCP STOP AND WAIT")
 		'''
-		'''
 		startmessage=' '*size
 
 		client_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -33,7 +32,11 @@ if tcp_udp == 'tcp':			#TCP
 		
 		startmessage=recv(1024)
 		size=recv(1024)
+<<<<<<< HEAD
 
+=======
+		'''
+>>>>>>> c4351f22dfa2dc9ccdb2cd5e2766a538f77ddc03
 	else:#python client.py Toshtp 12345 tcp streaming 1024
 		print("RUNNING TCP STREAMING")
 		'''
@@ -59,9 +62,10 @@ if tcp_udp == 'tcp':			#TCP
 		server_sock.send(message.encode('utf-8')) 	#send the size
 		count = total_size
 		buffer_ = ' '*size
+		buffer_ = buffer_.encode('utf-8')
 		message_count = 0
 		total_amt_sent = 0
-		ack = server_sock.recv(1024)
+		ack = server_sock.recv(1024).decode()
 		if ack == 1:
 			print("ack. received beginning")
 		start_time = time.time()
@@ -75,11 +79,11 @@ if tcp_udp == 'tcp':			#TCP
 				count -= size
 			message_count+=1
 		stop_time = time.time()
-		print("number of messages sent:"+message_count)
-		print("number of bytes sent:"+total_amt_sent)
+		print("number of messages sent:"+str(message_count))
+		print("number of bytes sent:"+str(total_amt_sent))
 		diff = stop_time - start_time
 
-		print("time took:" + diff)
+		print("time took:" + str(diff))
 		server_sock.close()
 		
 else: 							#UDP
