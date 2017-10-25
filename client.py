@@ -51,30 +51,28 @@ if tcp_udp == 'tcp':			#TCP
 		stop_time = stop_timer()
 		print (stop_time - start_time)/1M   # throughput in megabytes per second
 		'''
-		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-		server_sock.connect((host,port))
-		total_size = 1073741824
-		message =  "total_size:"+str(total_size)+",message_size:"+str(size)
+		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #create a tcp socket
+		server_sock.connect((host,port))   #connect hte socket to the remote host machine at port
+		total_size = 1073741824 			#the size of 1 GB
+		message =  "total_size:"+str(total_size)+",message_size:"+str(size) #send 1GB and the message size to the server
 		server_sock.send(message.encode('utf-8')) 	#send the size
-		count = total_size
-		buffer_ = ' '*size
-		buffer_ = buffer_.encode('utf-8')
-		message_count = 0
-		total_amt_sent = 0
-		ack = server_sock.recv(1024).decode()
+		count = total_size						#count is 1GB --will go to 0
+		buffer_ = ' '*size  					#buffer of data
+		buffer_ = buffer_.encode('utf-8')		#encode the data to send over the socket
+		message_count = 0						#keep the message count
+		total_amt_sent = 0						#keep the amount sent count
+		ack = server_sock.recv(1024).decode()	#get an ok (1) from the server
 		if ack == 1:
-			print("ack. received beginning")
-		start_time = time.time()
-		while(count>0):
-			amt_sent = server_sock.send(buffer_)
-			total_amt_sent += amt_sent
-			if(amt_sent < size):
+			print("ack. from server received beginning")
+		start_time = time.time()				#grab start time
+		while(count>0):							#while count is still bigger then 0 (it should be approching 0)
+			amt_sent = server_sock.send(buffer_) #send the buffer to the server and get the amtsend
+			total_amt_sent += total_amt_sent 	 #increment the amount sent
+			if(amt_sent < size):				#if the amount sent is less then the size it should be sending
 				print("ERROR: Amount sent was less then the buffer size")
-				count-= amt_sent
-			else:
-				count -= size
-			message_count+=1
-		stop_time = time.time()
+			count -= amt_sent 						#decrease count by the amount sent
+			message_count+=1					#message counter
+		stop_time = time.time()					#done grab time
 		print("number of messages sent:"+str(message_count))
 		print("number of bytes sent:"+str(total_amt_sent))
 		diff = stop_time - start_time
