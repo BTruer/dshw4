@@ -30,14 +30,10 @@ if tcp_udp == 'tcp':			#TCP
 		#buffer is just empty bytes could be anything
 		#buffersize this is the specified by the client from the command line
 		send(startessage size)
-		i meant to say recv grabs the first guy then the second guy?
+		
 		startmessage=recv(1024)
 		size=recv(1024)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f109640cdd3dd9bcf43be3d2cb66b6dafc6b567c
 	else:#python client.py Toshtp 12345 tcp streaming 1024
 		print("RUNNING TCP STREAMING")
 		'''
