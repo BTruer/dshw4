@@ -17,30 +17,40 @@ size = int(sys.argv[5])
 if tcp_udp == 'tcp':			#TCP 
 	if stop_stream == 'stop':	#Stop
 		print("RUNNING TCP STOP AND WAIT")
-		'''
-		startmessage=' '*size
 		total_size = 1073741824
+		#sending
 		client_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		client_sock.connect((host,port))
-		message = "total_size:"+str(total_size)+",message_size:"+str(size)
-		client_sock.send(message.encode('utf-8')) 
+		message = str(size)
+		client_sock.send(message.encode('utf-8')) #sends message to server
 		count = total_size
 		buffer_ = ' '*size
 		buffer_ = buffer_.encode('utf-8')
 		message_count = 0
 		total_amt_sent = 0
-		
-		ack = client_sock.recv(1024) 
 
-		#start message sends the total amount of data to be transfered
-		#buffer is just empty bytes could be anything
-		#buffersize this is the specified by the client from the command line
-		send(startessage size)
-		
-		startmessage=recv(1024)
-		size=recv(1024)
-		'''
-	else:#python client.py Toshtp 12345 tcp streaming 1024
+		#receiving
+	#	ack = server_sock.recv(1024).decode()	#get an ok (1) from the server
+	#	if ack == 1:
+	#		print("ack. from server received beginning")
+		start_time = time.time()				#grab start time
+		while(count>0):							#while count is still bigger then 0 (it should be approching 0)
+			amt_sent = client_sock.send(buffer_) #send the buffer to the server and get the amtsend
+			total_amt_sent += amt_sent 	 		#increment the amount sent
+			if(amt_sent < size):				#if the amount sent is less then the size it should be sending
+				print("ERROR: Amount sent was less then the buffer size")
+			count -= amt_sent 						#decrease count by the amount sent
+			message_count+=1					#message counter
+			ack=client_sock.recv(1024).decode()
+		stop_time = time.time()					#done grab time
+		print("number of messages sent:"+str(message_count))
+		print("number of bytes sent:"+str(total_amt_sent))
+		diff = stop_time - start_time
+
+		print("time took:" + str(diff))
+		server_sock.close()
+	
+	else:#python client.py Toshtp 12345 tcp streaming 16000
 		print("RUNNING TCP STREAMING")
 		'''
 		1G = 2^30
@@ -74,7 +84,7 @@ if tcp_udp == 'tcp':			#TCP
 		start_time = time.time()				#grab start time
 		while(count>0):							#while count is still bigger then 0 (it should be approching 0)
 			amt_sent = server_sock.send(buffer_) #send the buffer to the server and get the amtsend
-			total_amt_sent += total_amt_sent 	 #increment the amount sent
+			total_amt_sent += amt_sent 	 #increment the amount sent
 			if(amt_sent < size):				#if the amount sent is less then the size it should be sending
 				print("ERROR: Amount sent was less then the buffer size")
 			count -= amt_sent 						#decrease count by the amount sent

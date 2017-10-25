@@ -12,7 +12,36 @@ if tcp_udp == 'tcp':			#TCP
 	if stop_stream == 'stop':	#Stop
 		print("RUNNING TCP STOP AND WAIT")
 		'''
+		startmsg, size = read();
+		while (buf, size = read())
+			count += size
+			send(ackbuf, 1);
+			if (count >= expected_size)
+				break
 		'''
+		expected_size= 1073741824
+		server_sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		host = socket.gethostname()
+		print("this is host name: "+str(host))
+		server_sock.bind((host,port))
+		server_sock.listen(5)
+		to_client_sock, addr = server_sock.accept()
+		temp = to_client_sock.recv(1024)
+		message_size=int(temp)
+		print("recieved:"+str(message_size))
+		count=0
+
+		#while you can still recieve
+		while True:
+			data = to_client_sock.recv(message_size).decode()
+			count+=len(data)
+			print("this is current count: "+str(count))
+			to_client_sock.send('1'.encode())
+			if(count>=expected_size):
+				break
+		print("num of bytes read:"+str(count))	
+		to_client_sock.close() 
+
 
 	else:#python server.py 12345 tcp stream #TCP stream
 		print("RUNNING TCP STREAMING")
