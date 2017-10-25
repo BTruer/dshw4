@@ -11,7 +11,7 @@ port = int(sys.argv[2])
 tcp_udp = str(sys.argv[3])
 stop_stream = str(sys.argv[4])
 size = int(sys.argv[5])
-count = 1073741824
+
 
 #python client.py Toshtp 12345 tcp stop 1024
 if tcp_udp == 'tcp':			#TCP 
@@ -19,17 +19,24 @@ if tcp_udp == 'tcp':			#TCP
 		print("RUNNING TCP STOP AND WAIT")
 		'''
 		startmessage=' '*size
-
+		total_size = 1073741824
 		client_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		client_sock.connect((host,port))
-		client_sock.send(str(size))
+		message = "total_size:"+str(total_size)+",message_size:"+str(size)
+		client_sock.send(message.encode('utf-8')) 
+		count = total_size
+		buffer_ = ' '*size
+		buffer_ = buffer_.encode('utf-8')
+		message_count = 0
+		total_amt_sent = 0
+		
 		ack = client_sock.recv(1024) 
 
 		#start message sends the total amount of data to be transfered
 		#buffer is just empty bytes could be anything
 		#buffersize this is the specified by the client from the command line
 		send(startessage size)
-		i meant to say recv grabs the first guy then the second guy?
+		
 		startmessage=recv(1024)
 		size=recv(1024)
 		'''
