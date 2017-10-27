@@ -80,6 +80,30 @@ else: 							#UDP
 		print("RUNNING UDP STOP AND WAIT")
 		'''
 		'''
+		expected_size= 1073741824
+		server_sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+		host = socket.gethostname()
+		print("this is host name: "+str(host))
+		server_sock.bind((host,port))
+		
+		temp, clientAddress = server_sock.recvfrom(1024)
+		print("recieved temp:"+ temp)
+		message_size=int(temp)
+		print("recieved:"+str(message_size))
+		count=0
+
+		#while you can still recieve
+		
+		while True:
+			data, clientAddress = server_sock.recvfrom(message_size)
+			data=data.decode()
+			count+=len(data)
+			print("this is current count: "+str(count))
+			server_sock.sendto('1'.encode(), clientAddress)
+			if(count>=expected_size):
+				break
+		print("num of bytes read:"+str(count))	
+		server_sock.close() 
 	else:						#UDP stream
 		print("RUNNING UDP STREAMING")
 		'''
