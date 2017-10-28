@@ -54,4 +54,11 @@ else: 							#UDP
 	else:						#UDP stream
 		print("RUNNING UDP STREAMING")
 		'''
+		
+		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) 
+		host = socket.gethostname()
+		client = (host, port) 			# Get local machine name
+		server_sock.bind(client) 			# Bind to the port
+		while True:
+			data, address = sock.recvfrom(4096)
 		'''
