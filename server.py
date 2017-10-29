@@ -35,7 +35,6 @@ if tcp_udp == 'tcp':			#TCP
 		while True:
 			data = to_client_sock.recv(message_size).decode()
 			count+=len(data)
-			print("this is current count: "+str(count))
 			to_client_sock.send('1'.encode())
 			if(count>=expected_size):
 				break
@@ -58,9 +57,7 @@ if tcp_udp == 'tcp':			#TCP
 		server_sock.bind((host, port)) 			# Bind to the port
 		server_sock.listen(5)					# Get to listen
 		client_sock, addr = server_sock.accept()# Establish connection with client
-		temp = client_sock.recv(1024).decode().split(',')
-		total_size = int(temp[0].split(":")[1])
-		message_size = int(temp[1].split(":")[1])
+		message_size = int(client_sock.recv(1024).decode().split(':')[1])  #recieve the message size from the server
 		client_sock.send('1'.encode())					# Send the ack bit
 		byte_count = 0
 		messages = 0

@@ -71,7 +71,7 @@ if tcp_udp == 'tcp':			#TCP
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #create a tcp socket
 		server_sock.connect((host,port))   #connect hte socket to the remote host machine at port
 		total_size = 1073741824 			#the size of 1 GB
-		message =  "total_size:"+str(total_size)+",message_size:"+str(size) #send 1GB and the message size to the server
+		message =  "message_size:"+str(size) #send the message size to the server
 		server_sock.send(message.encode('utf-8')) 	#send the size
 		count = total_size						#count is 1GB --will go to 0
 		buffer_ = ' '*size  					#buffer of data
