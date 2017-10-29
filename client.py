@@ -28,11 +28,6 @@ if tcp_udp == 'tcp':			#TCP
 		buffer_ = buffer_.encode('utf-8')
 		message_count = 0
 		total_amt_sent = 0
-
-		#receiving
-	#	ack = server_sock.recv(1024).decode()	#get an ok (1) from the server
-	#	if ack == 1:
-	#		print("ack. from server received beginning")
 		start_time = time.time()				#grab start time
 		while(count>0):							#while count is still bigger then 0 (it should be approching 0)
 			amt_sent = client_sock.send(buffer_) #send the buffer to the server and get the amtsend
@@ -46,7 +41,6 @@ if tcp_udp == 'tcp':			#TCP
 		print("number of messages sent:"+str(message_count))
 		print("number of bytes sent:"+str(total_amt_sent))
 		diff = stop_time - start_time
-
 		print("time took:" + str(diff))
 		client_sock.close()
 	
@@ -79,8 +73,6 @@ if tcp_udp == 'tcp':			#TCP
 		message_count = 0						#keep the message count
 		total_amt_sent = 0						#keep the amount sent count
 		ack = server_sock.recv(1024).decode()	#get an ok (1) from the server
-		if ack == 1:
-			print("ack. from server received beginning")
 		start_time = time.time()				#grab start time
 		while(count>0):							#while count is still bigger then 0 (it should be approching 0)
 			amt_sent = server_sock.send(buffer_) #send the buffer to the server and get the amtsend
@@ -93,7 +85,6 @@ if tcp_udp == 'tcp':			#TCP
 		print("number of messages sent:"+str(message_count))
 		print("number of bytes sent:"+str(total_amt_sent))
 		diff = stop_time - start_time
-
 		print("time took:" + str(diff))
 		server_sock.close()
 		
@@ -143,14 +134,13 @@ else: 							#UDP
 		print("number of messages sent:"+str(message_count))
 		print("number of bytes sent:"+str(total_amt_sent))
 		diff = stop_time - start_time
-
 		print("time took:" + str(diff))
 		
 		client_sock.close()
 
 
 
-	else:						#UDP stream
+	else:#python client.py Toshtp 12345 udp streaming 1024						#UDP stream
 		print("RUNNING UDP STREAMING")
 		'''
 		1G = 2^30
@@ -167,11 +157,29 @@ else: 							#UDP
 		    count -= bytes_sent 
 		stop_time = stop_timer()
 		print (stop_time - start_time)/1M   # throughput in megabytes per second
-		
+		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 		server = (host,port)
 		server_sock.connect(server)
 		total_size = 1073741824 			#the size of 1 GB
-		message =  "total_size:"+str(total_size)+",message_size:"+str(size) #send 1GB and the message size to the server
-		sock.sendto(message, server)
-		'''
+		message =  "message_size:"+str(size) #send 1GB and the message size to the server
+		server_sock.sendto(message.encode('utf-8'), server)
+		count = total_size
+		buffer_ = ' '*size
+		buffer_ = buffer_.encode('utf-8')
+		message_count = 0
+		total_amt_sent = 0
+		start_time = time.time()
+		while(count>0):
+			amt_sent = server_sock.sendto(buffer_, server)
+			total_amt_sent += amt_sent
+			if(amt_sent < size):				#if the amount sent is less then the size it should be sending
+				print("ERROR: Amount sent was less then the buffer size")
+			count -= amt_sent 						#decrease count by the amount sent
+			message_count+=1
+		stop_time = time.time()
+		print("number of messages sent:"+str(message_count))
+		print("number of bytes sent:"+str(total_amt_sent))
+		diff = stop_time - start_time
+		print("time took:" + str(diff))
+		server_sock.close()
