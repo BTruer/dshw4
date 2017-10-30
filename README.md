@@ -53,3 +53,14 @@ $ python client.py ls.cs.rutgers.edu 12345 tcp stop 1024
 ## Server Design
 The server program was designed to behave like a pre-configured deamon. The server will take an initial configuration lets say `tcp stream` on port `12345`. This program will listen and wait for a connection. Then the first client will attempt to connect to the server and it will bind the socket connection to that client. If another client tries to connect to it while it is already connected it will fail. After the server has completed the transfer it will print out 1. what setting it was in (`RUNNING TCP STREAM`) 2. messages read (1073741824/message size + 1) and 3. number of bytes read which should be 1073741824 or 1GB.
 
+## Results
+
+This was the resulting data that we recieved from running on various ilab machines over the courses of days.
+![alt text](data.png "data")
+
+These are the graphs.
+![alt text](tcp.png "tcp")
+![alt text](udp.png "udp")
+
+
+
