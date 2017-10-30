@@ -35,7 +35,7 @@ if tcp_udp == 'tcp':			#TCP
 		while True:
 			data = to_client_sock.recv(message_size).decode()
 			count+=len(data)
-			print("this is current count: "+str(count))
+			#print("this is current count: "+str(count))
 			to_client_sock.send('1'.encode())
 			if(count>=expected_size):
 				break
