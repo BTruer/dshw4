@@ -1,4 +1,4 @@
-#!/usr/bin/python           # This is client.py file
+#!/usr/bin/python3           # This is client.py file
 
 import socket               # Import socket module
 import sys
@@ -13,9 +13,8 @@ stop_stream = str(sys.argv[4])
 size = int(sys.argv[5])
 
 
-#python client.py Toshtp 12345 tcp stop 1024
-if tcp_udp == 'tcp':			#TCP 
-	if stop_stream == 'stop':	#Stop
+if tcp_udp == 'tcp': #python client.py Toshtp 12345 tcp stop 1024
+	if stop_stream == 'stop':	#TCP Stop
 		print("RUNNING TCP STOP AND WAIT")
 		total_size = 1073741824
 		#sending
@@ -44,24 +43,8 @@ if tcp_udp == 'tcp':			#TCP
 		print("time took:" + str(diff))
 		client_sock.close()
 	
-	else:#python client.py Toshtp 12345 tcp streaming 16000
+	else:#python client.py Toshtp 12345 tcp streaming 1024
 		print("RUNNING TCP STREAMING")
-		'''
-		1G = 2^30
-		1M = 2^20
-		need_ack, msg_size = read_from_cmd_line() 	done 
-		startmsg = { need_ack=0, total_size=1G } 	done
-		send(startmsg) 								done
-		count = total_size done						done
-		start_time = start_timer()					done
-		while (count > 0)
-		    bytes_sent = send(buffer, msg_size)
-		    if (bytes_sent != msg_size)
-		        error()
-		    count -= bytes_sent 
-		stop_time = stop_timer()
-		print (stop_time - start_time)/1M   # throughput in megabytes per second
-		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #create a tcp socket
 		server_sock.connect((host,port))   #connect hte socket to the remote host machine at port
 		total_size = 1073741824 			#the size of 1 GB
@@ -88,27 +71,9 @@ if tcp_udp == 'tcp':			#TCP
 		print("time took:" + str(diff))
 		server_sock.close()
 		
-else: 							#UDP
-	if stop_stream == 'stop':	#stop
+else: #python client.py Toshtp 12345 udp stop 1024
+	if stop_stream == 'stop':	#UDP stop
 		print("RUNNING UDP STOP AND WAIT")
-		'''
-		1G = 2^30
-		1M = 2^20
-		need_ack, msg_size = read_from_cmd_line()
-		startmsg = { need_ack=1, total_size=1G }
-		send(startmsg)
-		count = total_size
-		start_time = start_timer()
-		while (count > 0)
-			bytes_sent = send(buffer, msg_size)
-			if (bytes_sent != msg_size)
-				error()
-			count -= bytes_sent 
-			ack, bytes_read = read()
-		stop_time = stop_timer()
-		print (stop_time - start_time)/1M   # throughput in megabytes per second
-
-		'''
 		total_size = 1073741824
 		message = str(size)
 		#sending
@@ -134,30 +99,13 @@ else: 							#UDP
 		print("number of messages sent:"+str(message_count))
 		print("number of bytes sent:"+str(total_amt_sent))
 		diff = stop_time - start_time
-		print("time took:" + str(diff))
-		
+		print("time took:" + str(diff))		
 		client_sock.close()
 
 
 
 	else:#python client.py Toshtp 12345 udp streaming 1024						#UDP stream
 		print("RUNNING UDP STREAMING")
-		'''
-		1G = 2^30
-		1M = 2^20
-		need_ack, msg_size = read_from_cmd_line()
-		startmsg = { need_ack=0, total_size=1G }
-		send(startmsg)
-		count = total_size
-		start_time = start_timer()
-		while (count > 0)
-		    bytes_sent = send(buffer, msg_size)
-		    if (bytes_sent != msg_size)
-		        error()
-		    count -= bytes_sent 
-		stop_time = stop_timer()
-		print (stop_time - start_time)/1M   # throughput in megabytes per second
-		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 		server = (host,port)
 		server_sock.connect(server)

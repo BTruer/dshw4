@@ -1,24 +1,16 @@
-#!/usr/bin/python           # This is server.py file
+#!/usr/bin/python3           # This is server.py file
 
 import socket               # Import socket module
 import sys
 
-#python server.py 12345 tcp stop
+
 port = int(sys.argv[1])
 tcp_udp = str(sys.argv[2])
 stop_stream = str(sys.argv[3])
 
-if tcp_udp == 'tcp':			#TCP 
-	if stop_stream == 'stop':	#Stop
+if tcp_udp == 'tcp':#python server.py 12345 tcp stop  
+	if stop_stream == 'stop': #TCP Stop
 		print("RUNNING TCP STOP AND WAIT")
-		'''
-		startmsg, size = read();
-		while (buf, size = read())
-			count += size
-			send(ackbuf, 1);
-			if (count >= expected_size)
-				break
-		'''
 		expected_size= 1073741824
 		server_sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		host = socket.gethostname()
@@ -29,7 +21,7 @@ if tcp_udp == 'tcp':			#TCP
 		message_size=int(temp)
 		count = 0
 		messages = 0
-		#while you can still recieve
+		#while you can still receive
 		while True:
 			data = to_client_sock.recv(message_size).decode()
 			count+=len(data)
@@ -44,14 +36,6 @@ if tcp_udp == 'tcp':			#TCP
 
 	else:#python server.py 12345 tcp stream #TCP stream
 		print("RUNNING TCP STREAMING")
-		'''
-		ack, size = read()
-		send(ackbuf, 1)
-		while (buf, bytes_read = read())
-		    count += bytes_read
-		    if (count >= expected_size)
-		        break
-		'''
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
 		host = socket.gethostname() 			# Get local machine name
 		server_sock.bind((host, port)) 			# Bind to the port
@@ -72,8 +56,8 @@ if tcp_udp == 'tcp':			#TCP
 		print("num of messages read:"+str(messages))
 		client_sock.close()    
 
-else: 							#UDP
-	if stop_stream == 'stop':	#stop
+else:#python server.py 12345 udp stop 
+	if stop_stream == 'stop': #UDP stop
 		print("RUNNING UDP STOP AND WAIT")
 		expected_size = 1073741824
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
