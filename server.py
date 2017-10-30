@@ -22,24 +22,23 @@ if tcp_udp == 'tcp':			#TCP
 		expected_size= 1073741824
 		server_sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		host = socket.gethostname()
-		print("this is host name: "+str(host))
 		server_sock.bind((host,port))
 		server_sock.listen(5)
 		to_client_sock, addr = server_sock.accept()
 		temp = to_client_sock.recv(1024)
 		message_size=int(temp)
-		print("recieved:"+str(message_size))
-		count=0
-
+		count = 0
+		messages = 0
 		#while you can still recieve
 		while True:
 			data = to_client_sock.recv(message_size).decode()
 			count+=len(data)
-			#print("this is current count: "+str(count))
+			messages+=1
 			to_client_sock.send('1'.encode())
 			if(count>=expected_size):
 				break
 		print("num of bytes read:"+str(count))	
+		print("num of messages read:"+str(messages))	
 		to_client_sock.close() 
 
 
@@ -58,10 +57,9 @@ if tcp_udp == 'tcp':			#TCP
 		server_sock.bind((host, port)) 			# Bind to the port
 		server_sock.listen(5)					# Get to listen
 		client_sock, addr = server_sock.accept()# Establish connection with client
-		temp = client_sock.recv(1024).decode().split(',')
-		total_size = int(temp[0].split(":")[1])
-		message_size = int(temp[1].split(":")[1])
+		message_size = int(client_sock.recv(1024).decode().split(':')[1])  #recieve the message size from the server
 		client_sock.send('1'.encode())					# Send the ack bit
+		total_size = 1073741824
 		byte_count = 0
 		messages = 0
 		while True:
@@ -70,41 +68,52 @@ if tcp_udp == 'tcp':			#TCP
 			messages+=1
 			if(byte_count >= total_size):
 				break
-		print("num of messages read:"+str(messages))
 		print("num of bytes read:"+str(byte_count))
-
+		print("num of messages read:"+str(messages))
 		client_sock.close()    
 
 else: 							#UDP
 	if stop_stream == 'stop':	#stop
 		print("RUNNING UDP STOP AND WAIT")
-		'''
-		'''
-		expected_size= 1073741824
-		server_sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+		expected_size = 1073741824
+		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 		host = socket.gethostname()
-		print("this is host name: "+str(host))
 		server_sock.bind((host,port))
-		
 		temp, clientAddress = server_sock.recvfrom(1024)
-		print("recieved temp:"+ temp)
-		message_size=int(temp)
-		print("recieved:"+str(message_size))
-		count=0
-
-		#while you can still recieve
-		
+		temp = temp.decode()
+		message_size = int(temp)
+		count = 0
+		messages = 0
+		#while you can still receive
 		while True:
 			data, clientAddress = server_sock.recvfrom(message_size)
+			data = data.decode()
+			count += len(data)
+			messages+=1
+			server_sock.sendto('1'.encode(), clientAddress)
+			if(count >= expected_size):
+				break
+		print("num of bytes read:"+str(count))
+		print("num of messages read:"+str(messages))	
+		server_sock.close() 
+	else:#python server.py 12345 udp streaming						#UDP stream
+		print("RUNNING UDP STREAMING")
+		expected_size = 1073741824
+		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) 
+		host = socket.gethostname()
+		client = (host, port) 			# Get local machine name
+		server_sock.bind(client) 			# Bind to the port
+		temp, clientAddress = server_sock.recvfrom(1024)
+		message_size = int(temp.decode().split(':')[1])
+		count = 0
+		messages = 0
+		while True:
+			data, address = server_sock.recvfrom(message_size)
 			data=data.decode()
 			count+=len(data)
-			print("this is current count: "+str(count))
-			server_sock.sendto('1'.encode(), clientAddress)
+			messages+=1
 			if(count>=expected_size):
 				break
-		print("num of bytes read:"+str(count))	
-		server_sock.close() 
-	else:						#UDP stream
-		print("RUNNING UDP STREAMING")
-		'''
-		'''
+		print("num of bytes read:"+str(count))
+		print("num of messages read:"+str(messages))
+		server_sock.close()
