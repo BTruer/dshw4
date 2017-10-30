@@ -2,6 +2,7 @@
 
 import socket               # Import socket module
 import sys
+import errno
 
 
 port = int(sys.argv[1])
@@ -24,6 +25,8 @@ if tcp_udp == 'tcp':#python server.py 12345 tcp stop
 		#while you can still receive
 		while True:
 			data = to_client_sock.recv(message_size).decode()
+			if not data:
+				break
 			count+=len(data)
 			messages+=1
 			to_client_sock.send('1'.encode())
@@ -71,6 +74,8 @@ else:#python server.py 12345 udp stop
 		#while you can still receive
 		while True:
 			data, clientAddress = server_sock.recvfrom(message_size)
+			if not data:
+				break
 			data = data.decode()
 			count += len(data)
 			messages+=1

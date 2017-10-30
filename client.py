@@ -108,7 +108,6 @@ else: #python client.py Toshtp 12345 udp stop 1024
 		print("RUNNING UDP STREAMING")
 		server_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 		server = (host,port)
-		server_sock.connect(server)
 		total_size = 1073741824 			#the size of 1 GB
 		message =  "message_size:"+str(size) #send 1GB and the message size to the server
 		server_sock.sendto(message.encode('utf-8'), server)
