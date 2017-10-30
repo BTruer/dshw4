@@ -1,3 +1,0 @@
-startmessage = sends the total amount of data to be transfered
-buffer = just emppyt bytes could be anything
-buffersize = this is specified by the client from the commandline
